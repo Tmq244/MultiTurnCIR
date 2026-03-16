@@ -71,12 +71,9 @@ pip install -r requirements.txt
 
 下载所需资源：
 
-- `cache` 可从以下链接下载：
-  `https://drive.google.com/file/d/1z6UeFZyJzE_tDOOarTQzWAduqGdzsIS-/view`
-- `images` 可从以下链接下载：
-  `https://drive.google.com/file/d/1pivWpO3_vpMLhySmQc9w53i9Tp0ib1lg/view`
-- `best_model.pth` 可从以下链接下载：
-  `https://huggingface.co/Tmq244/CFIR/tree/main`
+- `cache` 可从以下链接下载：[here](https://drive.google.com/file/d/1W7h2lpgToHAMlTJ2y4PGsct3u9jPV5hY/view?usp=sharing)
+- `images` 可从以下链接下载：[here](https://drive.google.com/file/d/1pivWpO3_vpMLhySmQc9w53i9Tp0ib1lg/view)
+- `best_model.pth` 可从以下链接下载：[here](https://huggingface.co/Tmq244/CFIR/tree/main)
 
 下载后请分别放到项目根目录下的：
 

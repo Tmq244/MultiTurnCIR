@@ -71,12 +71,9 @@ Note: with the current `requirements.txt` (`torch>=2.0.0`, `torchvision>=0.15.0`
 
 Download required resources:
 
-- `cache` can be downloaded from:
-  `https://drive.google.com/file/d/1z6UeFZyJzE_tDOOarTQzWAduqGdzsIS-/view`
-- `images` can be downloaded from:
-  `https://drive.google.com/file/d/1pivWpO3_vpMLhySmQc9w53i9Tp0ib1lg/view`
-- `best_model.pth` can be downloaded from:
-  `https://huggingface.co/Tmq244/CFIR/tree/main`
+- `cache` can be downloaded from: [here](https://drive.google.com/file/d/1W7h2lpgToHAMlTJ2y4PGsct3u9jPV5hY/view?usp=sharing)
+- `images` can be downloaded from: [here](https://drive.google.com/file/d/1pivWpO3_vpMLhySmQc9w53i9Tp0ib1lg/view)
+- `best_model.pth` can be downloaded from: [here](https://huggingface.co/Tmq244/CFIR/tree/main)
 
 After downloading, place them in the project root as:
 
