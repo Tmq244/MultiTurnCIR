@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multiturn Fashion Retrieval</title>
+    <link rel="stylesheet" href="/assets/style.css" />
+  </head>
+  <body>
+    <div class="bg-layer"></div>
+    <main class="container">
+      <header class="hero">
+        <h1>Multiturn Fashion Retrieval</h1>
+        <p>选择参考图，输入 modified text，连续多轮检索目标图。</p>
+      </header>
+
+      <section class="panel">
+        <h2>1. 选择参考图</h2>
+        <div class="control-row inline ref-picker">
+          <label for="referenceCode">首轮也可直接输入参考图编码</label>
+          <input id="referenceCode" type="text" placeholder="例如: B000SYGLHE" />
+          <button id="applyReferenceBtn" class="ghost">使用该编码</button>
+        </div>
+        <div id="gallery" class="gallery"></div>
+      </section>
+
+      <section class="panel">
+        <h2>2. 当前会话</h2>
+        <div id="sessionInfo" class="session-info"></div>
+        <ul id="turns" class="turns"></ul>
+      </section>
+
+      <section class="panel">
+        <h2>3. 检索结果（点击可设为下一轮参考图）</h2>
+        <div id="rounds" class="rounds"></div>
+      </section>
+
+      <section class="panel controls">
+        <h2>4. 会话控制</h2>
+        <div class="control-row inline">
+          <button id="resetBtn" class="ghost">Reset Session</button>
+        </div>
+        <div id="status" class="status"></div>
+      </section>
+    </main>
+
+    <script src="/assets/app.js"></script>
+  </body>
+</html>
