@@ -41,10 +41,10 @@ Python 3.10+ is recommended.
 python -m venv .venv
 ```
 
-Activate the virtual environment in Windows PowerShell:
+Activate the virtual environment in Linux:
 
-```powershell
-.\.venv\Scripts\Activate.ps1
+```bash
+source .venv/bin/activate
 ```
 
 Install dependencies:
@@ -52,6 +52,22 @@ Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
+
+For servers without CUDA/GPU, use this recommended installation order:
+
+1. Install CPU-only PyTorch wheels:
+
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+```
+
+2. Install the remaining dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Note: with the current `requirements.txt` (`torch>=2.0.0`, `torchvision>=0.15.0`), pip usually keeps the already installed CPU builds if versions satisfy constraints.
 
 Download required resources:
 

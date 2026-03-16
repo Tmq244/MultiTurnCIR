@@ -41,10 +41,10 @@ MultiTurnCIR/
 python -m venv .venv
 ```
 
-Windows PowerShell 激活虚拟环境：
+Linux 下激活虚拟环境：
 
-```powershell
-.\.venv\Scripts\Activate.ps1
+```bash
+source .venv/bin/activate
 ```
 
 安装依赖：
@@ -52,6 +52,22 @@ Windows PowerShell 激活虚拟环境：
 ```bash
 pip install -r requirements.txt
 ```
+
+如果服务器没有 CUDA/GPU，建议按以下顺序安装：
+
+1. 先安装 CPU 版 PyTorch：
+
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+```
+
+2. 再安装其余依赖：
+
+```bash
+pip install -r requirements.txt
+```
+
+说明：按当前 `requirements.txt`（`torch>=2.0.0`、`torchvision>=0.15.0`），只要版本满足约束，后续安装通常会保留已安装的 CPU 版本，不会重复替换。
 
 下载所需资源：
 
