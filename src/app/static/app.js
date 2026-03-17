@@ -3,8 +3,10 @@ const state = {
   referenceId: null,
   turns: [],
   roundCounter: 0,
+  tags: [],
   suggestedTexts: [],
   suggestionRequestId: 0,
+  waitingNextReferenceSelection: false,
 };
 
 const galleryEl = document.getElementById("gallery");
@@ -45,6 +47,7 @@ function renderSession() {
 
 function setReference(imageId) {
   state.referenceId = imageId;
+  state.waitingNextReferenceSelection = false;
   renderSession();
   refreshSelectableBorders();
   updateSuggestionsForReference(imageId);
@@ -62,7 +65,9 @@ function renderSuggestionOptions(roundBlock, suggestions) {
   if (values.length === 0) {
     const empty = document.createElement("span");
     empty.className = "suggestion-empty";
-    empty.textContent = "暂无推荐文本";
+    empty.textContent = state.waitingNextReferenceSelection
+      ? "请先在上一轮结果中选择下一轮参考图"
+      : "暂无推荐文本";
     host.appendChild(empty);
     return;
   }
@@ -80,14 +85,42 @@ function renderSuggestionOptions(roundBlock, suggestions) {
   });
 }
 
+function renderTagOptions(roundBlock, tags) {
+  if (!roundBlock) return;
+  const host = roundBlock.querySelector(".tag-options");
+  if (!host) return;
+
+  host.innerHTML = "";
+  const values = Array.isArray(tags) ? tags : [];
+
+  if (values.length === 0) {
+    const empty = document.createElement("span");
+    empty.className = "tag-empty";
+    empty.textContent = state.waitingNextReferenceSelection
+      ? "请先在上一轮结果中选择下一轮参考图"
+      : "暂无 tag";
+    host.appendChild(empty);
+    return;
+  }
+
+  values.forEach((tag) => {
+    const chip = document.createElement("span");
+    chip.className = "tag-chip";
+    chip.textContent = tag;
+    host.appendChild(chip);
+  });
+}
+
 function renderActiveRoundSuggestions() {
   const activeRound = roundsEl.querySelector(".round-block.active");
   if (!activeRound) return;
+  renderTagOptions(activeRound, state.tags);
   renderSuggestionOptions(activeRound, state.suggestedTexts);
 }
 
 async function updateSuggestionsForReference(imageId) {
   if (!imageId) {
+    state.tags = [];
     state.suggestedTexts = [];
     renderActiveRoundSuggestions();
     return;
@@ -108,12 +141,14 @@ async function updateSuggestionsForReference(imageId) {
     state.suggestedTexts = Array.isArray(data.suggested_texts)
       ? data.suggested_texts.slice(0, 2)
       : [];
+    state.tags = Array.isArray(data.tags) ? data.tags : [];
     renderActiveRoundSuggestions();
   } catch (_err) {
     if (requestId !== state.suggestionRequestId) {
       return;
     }
     state.suggestedTexts = [];
+    state.tags = [];
     renderActiveRoundSuggestions();
   }
 }
@@ -320,7 +355,7 @@ async function runRetrieve() {
     }
 
     const data = await resp.json();
-    setReference(data.reference_id);
+    state.referenceId = data.reference_id;
     state.turns = data.turns;
 
     // After first retrieval, keep only the selected reference image in gallery.
@@ -352,6 +387,10 @@ async function runRetrieve() {
       retrieveBtnEl.disabled = true;
     }
 
+    state.waitingNextReferenceSelection = true;
+    state.tags = [];
+    state.suggestedTexts = [];
+
     appendNewRoundComposer();
     setRoundStatus(activeRound, `完成: 返回 ${data.results.length} 条结果`);
     renderSession();
@@ -364,6 +403,9 @@ async function runRetrieve() {
 async function resetSession() {
   if (!state.sessionId) {
     state.turns = [];
+    state.waitingNextReferenceSelection = false;
+    state.tags = [];
+    state.suggestedTexts = [];
     await loadGallery();
     roundsEl.innerHTML = "";
     state.roundCounter = 0;
@@ -381,6 +423,9 @@ async function resetSession() {
     const data = await resp.json();
     state.turns = data.turns;
     state.sessionId = null;
+    state.waitingNextReferenceSelection = false;
+    state.tags = [];
+    state.suggestedTexts = [];
     await loadGallery();
     roundsEl.innerHTML = "";
     state.roundCounter = 0;
@@ -413,6 +458,16 @@ function appendNewRoundComposer() {
 
   const rowText = document.createElement("div");
   rowText.className = "control-row";
+
+  const rowTag = document.createElement("div");
+  rowTag.className = "control-row";
+  const tagLabel = document.createElement("div");
+  tagLabel.className = "tag-label";
+  tagLabel.textContent = "参考图 tag";
+  const tagOptions = document.createElement("div");
+  tagOptions.className = "tag-options";
+  rowTag.appendChild(tagLabel);
+  rowTag.appendChild(tagOptions);
 
   const rowSuggestion = document.createElement("div");
   rowSuggestion.className = "control-row";
@@ -459,6 +514,7 @@ function appendNewRoundComposer() {
   resultGrid.className = "round-results";
 
   block.appendChild(head);
+  block.appendChild(rowTag);
   block.appendChild(rowSuggestion);
   block.appendChild(rowText);
   block.appendChild(rowInline);
@@ -466,6 +522,7 @@ function appendNewRoundComposer() {
   block.appendChild(resultGrid);
 
   roundsEl.appendChild(block);
+  renderTagOptions(block, state.tags);
   renderSuggestionOptions(block, state.suggestedTexts);
   textarea.focus();
 }
