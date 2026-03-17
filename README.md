@@ -1,6 +1,6 @@
-# MultiTurnCIR
+# MT CIR
 
-A FastAPI-based Multiturn Fashion Retrieval demo.
+A FastAPI-based Multiturn Composed Image Retrieve demo.
 
 ## Project & References
 

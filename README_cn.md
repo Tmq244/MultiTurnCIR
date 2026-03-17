@@ -1,6 +1,6 @@
-# MultiTurnCIR
+# MT CIR
 
-基于 FastAPI 的多轮图像检索（Multiturn Fashion Retrieval）演示项目。
+基于 FastAPI 的多轮组合图像检索（Multiturn Composed Image Retrieve）演示项目。
 
 ## 项目与来源说明
 
