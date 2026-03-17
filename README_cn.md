@@ -2,6 +2,15 @@
 
 基于 FastAPI 的多轮图像检索（Multiturn Fashion Retrieval）演示项目。
 
+## 项目与来源说明
+
+- 项目 GitHub：[https://github.com/Tmq244/MultiTurnCIR](https://github.com/Tmq244/MultiTurnCIR)
+- 本项目使用模型：**CFIR**
+  - 论文（SIGIR）：*Conversational Fashion Image Retrieval via Multiturn Natural Language Feedback*
+  - 论文链接：[https://arxiv.org/abs/2106.04128](https://arxiv.org/abs/2106.04128)
+- 训练代码仓库：[https://github.com/Tmq244/CFIR](https://github.com/Tmq244/CFIR)
+- 使用数据库：[Multi-Turn FashionIQ](https://github.com/yfyuan01/MultiturnFashionRetrieval/tree/master)
+
 用户可以先选择一张参考图，再输入多轮 `modified text`（例如“改成无袖、颜色更亮”），系统会在图库中持续检索更符合描述的目标图像。
 
 ## 1. 项目目录结构

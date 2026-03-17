@@ -2,6 +2,15 @@
 
 A FastAPI-based Multiturn Fashion Retrieval demo.
 
+## Project & References
+
+- Project GitHub: [https://github.com/Tmq244/MultiTurnCIR](https://github.com/Tmq244/MultiTurnCIR)
+- Model used in this project: **CFIR**
+  - Paper (SIGIR): *Conversational Fashion Image Retrieval via Multiturn Natural Language Feedback*
+  - Paper link: [https://arxiv.org/abs/2106.04128](https://arxiv.org/abs/2106.04128)
+- Training code: [https://github.com/Tmq244/CFIR](https://github.com/Tmq244/CFIR)
+- Dataset used as database: [Multi-Turn FashionIQ](https://github.com/yfyuan01/MultiturnFashionRetrieval/tree/master)
+
 You can start from a reference image, then submit multiple rounds of `modified text` (for example: "make it sleeveless and brighter"). The system keeps retrieving images that better match the evolving description.
 
 ## 1. Project Structure
