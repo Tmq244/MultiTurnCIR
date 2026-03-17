@@ -57,3 +57,4 @@ class ReferenceResolveResponse(BaseModel):
     exists: bool
     image_id: str
     image_url: str | None = None
+    suggested_texts: list[str] = Field(default_factory=list)

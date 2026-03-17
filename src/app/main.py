@@ -11,6 +11,7 @@ from starlette.requests import Request
 from .config import get_config
 from .model_service import ModelService
 from .retrieval_service import RetrievalService
+from .reference_text_service import ReferenceTextService
 from .schemas import (
     GalleryItem,
     GalleryResponse,
@@ -29,6 +30,7 @@ cfg = get_config()
 model_service = ModelService(cfg)
 retrieval_service = RetrievalService(model_service, cfg.cache_dir, cfg.index_limit)
 session_service = SessionService()
+reference_text_service = ReferenceTextService(cfg.data_dir)
 
 app = FastAPI(title="Multiturn Fashion Retrieval Demo")
 app.mount("/assets", StaticFiles(directory=cfg.app_root / "app/static"), name="assets")
@@ -60,10 +62,12 @@ def gallery() -> GalleryResponse:
 @app.get("/api/reference/{image_id}", response_model=ReferenceResolveResponse)
 def resolve_reference(image_id: str) -> ReferenceResolveResponse:
     exists = model_service.image_exists(image_id)
+    suggestions = reference_text_service.get_suggestions(image_id=image_id, count=2)
     return ReferenceResolveResponse(
         exists=exists,
         image_id=image_id,
         image_url=f"/images/{image_id}.jpg" if exists else None,
+        suggested_texts=suggestions,
     )
 
 

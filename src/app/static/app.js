@@ -3,6 +3,8 @@ const state = {
   referenceId: null,
   turns: [],
   roundCounter: 0,
+  suggestedTexts: [],
+  suggestionRequestId: 0,
 };
 
 const galleryEl = document.getElementById("gallery");
@@ -39,6 +41,81 @@ function renderSession() {
     li.textContent = `Turn ${idx + 1}: ${turn}`;
     turnsEl.appendChild(li);
   });
+}
+
+function setReference(imageId) {
+  state.referenceId = imageId;
+  renderSession();
+  refreshSelectableBorders();
+  updateSuggestionsForReference(imageId);
+}
+
+function renderSuggestionOptions(roundBlock, suggestions) {
+  if (!roundBlock) return;
+  const host = roundBlock.querySelector(".suggestion-options");
+  const textarea = roundBlock.querySelector("textarea");
+  if (!host || !textarea) return;
+
+  host.innerHTML = "";
+  const values = Array.isArray(suggestions) ? suggestions.slice(0, 2) : [];
+
+  if (values.length === 0) {
+    const empty = document.createElement("span");
+    empty.className = "suggestion-empty";
+    empty.textContent = "暂无推荐文本";
+    host.appendChild(empty);
+    return;
+  }
+
+  values.forEach((text) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "suggestion-chip";
+    btn.textContent = text;
+    btn.addEventListener("click", () => {
+      textarea.value = text;
+      textarea.focus();
+    });
+    host.appendChild(btn);
+  });
+}
+
+function renderActiveRoundSuggestions() {
+  const activeRound = roundsEl.querySelector(".round-block.active");
+  if (!activeRound) return;
+  renderSuggestionOptions(activeRound, state.suggestedTexts);
+}
+
+async function updateSuggestionsForReference(imageId) {
+  if (!imageId) {
+    state.suggestedTexts = [];
+    renderActiveRoundSuggestions();
+    return;
+  }
+
+  const requestId = ++state.suggestionRequestId;
+  try {
+    const resp = await fetch(`/api/reference/${encodeURIComponent(imageId)}`);
+    if (!resp.ok) {
+      throw new Error(await resp.text());
+    }
+
+    const data = await resp.json();
+    if (requestId !== state.suggestionRequestId) {
+      return;
+    }
+
+    state.suggestedTexts = Array.isArray(data.suggested_texts)
+      ? data.suggested_texts.slice(0, 2)
+      : [];
+    renderActiveRoundSuggestions();
+  } catch (_err) {
+    if (requestId !== state.suggestionRequestId) {
+      return;
+    }
+    state.suggestedTexts = [];
+    renderActiveRoundSuggestions();
+  }
 }
 
 function createImageCard(imageId, imageUrl, onClick, extraText = "") {
@@ -88,9 +165,7 @@ function pinRoundResult(roundBlockEl, item) {
 function collapseGalleryToSingle(imageId) {
   if (!imageId) return;
   const pinned = createImageCard(imageId, `/images/${imageId}.jpg`, () => {
-    state.referenceId = imageId;
-    renderSession();
-    refreshSelectableBorders();
+    setReference(imageId);
   });
   pinned.classList.add("selected");
   galleryEl.innerHTML = "";
@@ -116,10 +191,8 @@ async function applyReferenceByCode() {
       return;
     }
 
-    state.referenceId = data.image_id;
+    setReference(data.image_id);
     collapseGalleryToSingle(data.image_id);
-    renderSession();
-    refreshSelectableBorders();
     setStatus(`已设置首轮参考图: ${data.image_id}`);
   } catch (err) {
     setStatus(`设置参考图失败: ${String(err)}`);
@@ -153,18 +226,17 @@ async function loadGallery() {
   galleryEl.innerHTML = "";
   data.items.forEach((item) => {
     const card = createImageCard(item.image_id, item.image_url, (imageId) => {
-      state.referenceId = imageId;
-      renderSession();
-      refreshSelectableBorders();
+      setReference(imageId);
     });
     galleryEl.appendChild(card);
   });
 
   if (!state.referenceId && data.items.length > 0) {
-    state.referenceId = data.items[0].image_id;
+    setReference(data.items[0].image_id);
+  } else {
+    renderSession();
+    refreshSelectableBorders();
   }
-  renderSession();
-  refreshSelectableBorders();
 }
 
 function refreshSelectableBorders() {
@@ -192,10 +264,9 @@ async function ensureSession() {
   }
   const data = await resp.json();
   state.sessionId = data.session_id;
-  state.referenceId = data.reference_id;
+  setReference(data.reference_id);
   state.turns = data.turns;
   renderSession();
-  refreshSelectableBorders();
 }
 
 async function runRetrieve() {
@@ -249,7 +320,7 @@ async function runRetrieve() {
     }
 
     const data = await resp.json();
-    state.referenceId = data.reference_id;
+    setReference(data.reference_id);
     state.turns = data.turns;
 
     // After first retrieval, keep only the selected reference image in gallery.
@@ -263,10 +334,8 @@ async function runRetrieve() {
         item.image_id,
         item.image_url,
         (imageId) => {
-          state.referenceId = item.image_id;
+          setReference(item.image_id);
           activeRound._selectedItem = item;
-          renderSession();
-          refreshSelectableBorders();
           resultsEl.querySelectorAll(".card").forEach((node) => node.classList.remove("selected"));
           card.classList.add("selected");
           setRoundStatus(activeRound, `已选择下一轮参考图: ${imageId}`);
@@ -344,6 +413,17 @@ function appendNewRoundComposer() {
 
   const rowText = document.createElement("div");
   rowText.className = "control-row";
+
+  const rowSuggestion = document.createElement("div");
+  rowSuggestion.className = "control-row";
+  const suggestionLabel = document.createElement("div");
+  suggestionLabel.className = "suggestion-label";
+  suggestionLabel.textContent = "推荐描述（点击可自动填入）";
+  const suggestionOptions = document.createElement("div");
+  suggestionOptions.className = "suggestion-options";
+  rowSuggestion.appendChild(suggestionLabel);
+  rowSuggestion.appendChild(suggestionOptions);
+
   const textarea = document.createElement("textarea");
   textarea.placeholder = "例如: make it sleeveless and brighter";
   rowText.appendChild(textarea);
@@ -379,12 +459,14 @@ function appendNewRoundComposer() {
   resultGrid.className = "round-results";
 
   block.appendChild(head);
+  block.appendChild(rowSuggestion);
   block.appendChild(rowText);
   block.appendChild(rowInline);
   block.appendChild(resultTitle);
   block.appendChild(resultGrid);
 
   roundsEl.appendChild(block);
+  renderSuggestionOptions(block, state.suggestedTexts);
   textarea.focus();
 }
 
