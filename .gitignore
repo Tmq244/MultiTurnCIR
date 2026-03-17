@@ -1,3 +1,4 @@
 images
 cache
+*.pyc
 *.pth
