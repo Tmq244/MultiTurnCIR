@@ -463,7 +463,7 @@ function appendNewRoundComposer() {
   rowTag.className = "control-row";
   const tagLabel = document.createElement("div");
   tagLabel.className = "tag-label";
-  tagLabel.textContent = "参考图 tag";
+  tagLabel.textContent = "参考图标签";
   const tagOptions = document.createElement("div");
   tagOptions.className = "tag-options";
   rowTag.appendChild(tagLabel);
@@ -473,14 +473,14 @@ function appendNewRoundComposer() {
   rowSuggestion.className = "control-row";
   const suggestionLabel = document.createElement("div");
   suggestionLabel.className = "suggestion-label";
-  suggestionLabel.textContent = "推荐描述（点击可自动填入）";
+  suggestionLabel.textContent = "推荐修改文本（点击可自动填入）";
   const suggestionOptions = document.createElement("div");
   suggestionOptions.className = "suggestion-options";
   rowSuggestion.appendChild(suggestionLabel);
   rowSuggestion.appendChild(suggestionOptions);
 
   const textarea = document.createElement("textarea");
-  textarea.placeholder = "例如: make it sleeveless and brighter";
+  textarea.placeholder = "仅支持英语，例如: make it sleeveless and brighter";
   rowText.appendChild(textarea);
 
   const rowInline = document.createElement("div");

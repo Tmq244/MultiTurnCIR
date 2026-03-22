@@ -1,11 +1,16 @@
 :root {
-  --bg-1: #f7f4ef;
-  --bg-2: #efe8dc;
-  --ink: #1f2a30;
-  --accent: #c05a2c;
-  --accent-2: #2f6d8c;
-  --panel: rgba(255, 255, 255, 0.78);
-  --border: rgba(31, 42, 48, 0.14);
+  --bg-1: #f7f3e8;
+  --bg-2: #e7eef3;
+  --ink: #1d2b36;
+  --ink-soft: #5b6e7c;
+  --accent: #c4662f;
+  --accent-strong: #ab5222;
+  --accent-2: #2b6f8e;
+  --accent-2-strong: #1f5670;
+  --panel: rgba(255, 255, 255, 0.94);
+  --panel-strong: rgba(255, 255, 255, 0.98);
+  --border: rgba(24, 46, 61, 0.14);
+  --shadow: 0 12px 30px rgba(25, 44, 59, 0.08);
 }
 
 * {
@@ -15,47 +20,72 @@
 body {
   margin: 0;
   color: var(--ink);
-  background: linear-gradient(160deg, var(--bg-1), var(--bg-2));
+  background:
+    radial-gradient(circle at 8% 12%, rgba(196, 102, 47, 0.12), transparent 22%),
+    radial-gradient(circle at 92% 10%, rgba(43, 111, 142, 0.15), transparent 24%),
+    linear-gradient(148deg, var(--bg-1), var(--bg-2));
   font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  position: relative;
+  min-height: 100vh;
+  line-height: 1.45;
 }
 
 .bg-layer {
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(circle at 15% 20%, rgba(192, 90, 44, 0.15), transparent 35%),
-    radial-gradient(circle at 80% 10%, rgba(47, 109, 140, 0.18), transparent 30%);
+  z-index: 0;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 34px 34px;
+  opacity: 0.25;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 22px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero {
+  margin-bottom: 6px;
+  padding: 18px 18px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: linear-gradient(120deg, var(--panel-strong), rgba(255, 255, 255, 0.86));
+  box-shadow: var(--shadow);
 }
 
 .hero h1 {
   margin: 0;
-  font-size: 2rem;
-  letter-spacing: 0.02em;
+  font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+  letter-spacing: 0.01em;
+  color: #1a3341;
 }
 
 .hero p {
   margin-top: 10px;
-  opacity: 0.82;
+  max-width: 760px;
+  color: var(--ink-soft);
 }
 
 .panel {
-  margin-top: 16px;
-  padding: 14px;
+  margin-top: 18px;
+  padding: 16px;
   border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--panel);
-  backdrop-filter: blur(4px);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow);
+  animation: panelFadeIn 320ms ease;
 }
 
 .panel h2 {
-  margin: 0 0 10px 0;
-  font-size: 1.1rem;
+  margin: 0 0 12px 0;
+  font-size: 1.14rem;
+  color: #203746;
 }
 
 .project-meta p {
@@ -84,21 +114,21 @@ body {
 .rounds {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .round-block {
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.96);
 }
 
 .round-head {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  margin-bottom: 8px;
-  color: #2d3f47;
+  margin-bottom: 9px;
+  color: #264354;
 }
 
 .round-results {
@@ -109,33 +139,37 @@ body {
 }
 
 .card {
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   border: 2px solid transparent;
   background: #fff;
   cursor: pointer;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 8px 18px rgba(23, 41, 55, 0.08);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 26px rgba(23, 41, 55, 0.16);
 }
 
 .card.selected {
   border-color: var(--accent);
+  box-shadow: 0 12px 26px rgba(196, 102, 47, 0.22);
 }
 
 .card img {
   width: 100%;
-  height: 132px;
+  height: 136px;
   object-fit: cover;
   display: block;
 }
 
 .card .caption {
-  padding: 6px;
-  font-size: 0.75rem;
+  padding: 7px;
+  font-size: 0.76rem;
   word-break: break-all;
+  color: #2c4658;
 }
 
 .control-row {
@@ -145,10 +179,19 @@ body {
 textarea {
   width: 100%;
   min-height: 84px;
-  padding: 10px;
+  padding: 11px;
   border-radius: 10px;
   border: 1px solid var(--border);
   font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.96);
+}
+
+textarea:focus,
+input[type="number"]:focus,
+.ref-picker input[type="text"]:focus {
+  outline: none;
+  border-color: rgba(43, 111, 142, 0.45);
+  box-shadow: 0 0 0 3px rgba(43, 111, 142, 0.12);
 }
 
 .inline {
@@ -163,6 +206,7 @@ input[type="number"] {
   padding: 8px;
   border-radius: 8px;
   border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.96);
 }
 
 .ref-picker input[type="text"] {
@@ -170,19 +214,28 @@ input[type="number"] {
   padding: 8px;
   border-radius: 8px;
   border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.96);
 }
 
 button {
   padding: 10px 14px;
   border: none;
   border-radius: 8px;
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
   color: #fff;
   cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 8px 16px rgba(196, 102, 47, 0.24);
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(196, 102, 47, 0.28);
 }
 
 button.ghost {
-  background: var(--accent-2);
+  background: linear-gradient(135deg, var(--accent-2), var(--accent-2-strong));
+  box-shadow: 0 8px 16px rgba(43, 111, 142, 0.24);
 }
 
 .status {
@@ -216,6 +269,7 @@ button.ghost {
   color: #7a3a1c;
   font-size: 0.76rem;
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 .tag-empty {
@@ -243,10 +297,12 @@ button.ghost {
   color: #264e64;
   font-size: 0.78rem;
   line-height: 1.25;
+  box-shadow: none;
 }
 
 .suggestion-chip:hover {
   background: rgba(47, 109, 140, 0.16);
+  box-shadow: none;
 }
 
 .suggestion-empty {
@@ -269,12 +325,32 @@ button.ghost {
   color: #34434a;
 }
 
+@keyframes panelFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 12px;
   }
 
+  .hero {
+    padding: 14px 14px 12px;
+  }
+
   .card img {
     height: 120px;
+  }
+
+  .panel {
+    padding: 13px;
   }
 }
