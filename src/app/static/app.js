@@ -524,7 +524,6 @@ function appendNewRoundComposer() {
   roundsEl.appendChild(block);
   renderTagOptions(block, state.tags);
   renderSuggestionOptions(block, state.suggestedTexts);
-  textarea.focus();
 }
 
 loadGallery()
