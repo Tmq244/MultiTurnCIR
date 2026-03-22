@@ -111,6 +111,8 @@ python src/run.py --device cpu --host 127.0.0.1 --port 8001
 
 说明：
 
+- `cache/` 用于存放预计算的检索索引文件（例如 embedding 向量矩阵与图像的映射），用于加速检索。
+- 首次启动如果没有可用的 `cache`，系统会先计算并构建 cache/index，再提供检索服务。
 - 不传 `--index-limit` 时，默认使用 `cache/cache_all`
 - 传入 `--index-limit N` 时，使用 `cache/cache_bench_N`
 
@@ -149,8 +151,3 @@ curl -X POST "http://127.0.0.1:8001/api/session/<session_id>/retrieve" \
   -d "{\"modified_text\":\"make it sleeveless and brighter\",\"top_k\":10}"
 ```
 
-## 6. 常见问题
-
-- 模型加载慢：首次启动会进行模型与索引初始化，耗时取决于设备和索引规模。
-- 图片无法显示：确认 `images/` 目录存在并且包含对应图片文件。
-- GPU 未生效：启动时使用 `--device cuda`，并确认本机 PyTorch CUDA 环境可用。

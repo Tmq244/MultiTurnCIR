@@ -1,6 +1,8 @@
 # MT CIR
 
-A FastAPI-based Multiturn Composed Image Retrieve demo.
+[中文](https://github.com/Tmq244/MultiTurnCIR/blob/main/README_cn.md)
+
+A FastAPI-based Multiturn Composed Image Retrieve demo. 
 
 ## Project & References
 
@@ -111,6 +113,8 @@ Optional arguments:
 
 Notes:
 
+- `cache/` stores precomputed retrieval index artifacts (for example: embedding matrix and image mapping) used to speed up search.
+- If no cache is available at first startup, the app will compute and build the cache/index before serving retrieval requests.
 - Without `--index-limit`, the app uses `cache/cache_all`
 - With `--index-limit N`, the app uses `cache/cache_bench_N`
 
@@ -149,8 +153,3 @@ curl -X POST "http://127.0.0.1:8001/api/session/<session_id>/retrieve" \
   -d "{\"modified_text\":\"make it sleeveless and brighter\",\"top_k\":10}"
 ```
 
-## 6. Troubleshooting
-
-- Slow startup: the first run initializes model and index, which may take time.
-- Images not displayed: make sure the `images/` directory exists and contains valid image files.
-- GPU not used: run with `--device cuda` and confirm your local PyTorch CUDA setup is available.
