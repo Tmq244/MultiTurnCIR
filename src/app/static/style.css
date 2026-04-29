@@ -51,12 +51,20 @@ body {
 }
 
 .hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
   margin-bottom: 6px;
   padding: 18px 18px 14px;
   border-radius: 14px;
   border: 1px solid var(--border);
   background: linear-gradient(120deg, var(--panel-strong), rgba(255, 255, 255, 0.86));
   box-shadow: var(--shadow);
+}
+
+.hero-copy {
+  min-width: 0;
 }
 
 .hero h1 {
@@ -70,6 +78,37 @@ body {
   margin-top: 10px;
   max-width: 760px;
   color: var(--ink-soft);
+}
+
+.github-link {
+  display: inline-grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgba(24, 46, 61, 0.18);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.82);
+  color: #1a3341;
+  text-decoration: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.github-link:hover {
+  background: #fff;
+  border-color: rgba(24, 46, 61, 0.28);
+  transform: translateY(-1px);
+}
+
+.github-link:focus-visible {
+  outline: 3px solid rgba(43, 111, 142, 0.2);
+  outline-offset: 2px;
+}
+
+.github-link svg {
+  display: block;
+  width: 24px;
+  height: 24px;
 }
 
 .panel {
@@ -344,6 +383,11 @@ button.ghost {
 
   .hero {
     padding: 14px 14px 12px;
+  }
+
+  .github-link {
+    width: 38px;
+    height: 38px;
   }
 
   .card img {
