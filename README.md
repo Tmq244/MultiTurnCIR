@@ -4,6 +4,8 @@
 
 A FastAPI-based Multiturn Composed Image Retrieve demo. 
 
+Online demo: [https://cir.mqtang.cc/](https://cir.mqtang.cc/)
+
 ## Project & References
 
 - Project GitHub: [https://github.com/Tmq244/MultiTurnCIR](https://github.com/Tmq244/MultiTurnCIR)
@@ -14,6 +16,13 @@ A FastAPI-based Multiturn Composed Image Retrieve demo.
 - Dataset used as database: [Multi-Turn FashionIQ](https://github.com/yfyuan01/MultiturnFashionRetrieval/tree/master)
 
 You can start from a reference image, then submit multiple rounds of `modified text` (for example: "make it sleeveless and brighter"). The system keeps retrieving images that better match the evolving description.
+
+## Demo Screenshots
+
+| | |
+|---|---|
+| ![Demo screenshot 1](pics/1.png) | ![Demo screenshot 2](pics/2.png) |
+| ![Demo screenshot 3](pics/3.png) | ![Demo screenshot 4](pics/4.png) |
 
 ## 1. Project Structure
 
