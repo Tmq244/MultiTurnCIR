@@ -46,7 +46,11 @@ def _startup() -> None:
 
 @app.get("/", response_class=HTMLResponse)
 def index_page(request: Request) -> HTMLResponse:
-    return templates.TemplateResponse(request=request, name="index.html")
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"icp_text": cfg.icp_text},
+    )
 
 
 @app.get("/api/health", response_model=HealthResponse)

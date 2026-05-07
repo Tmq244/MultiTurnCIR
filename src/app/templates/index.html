@@ -99,6 +99,12 @@
       </section>
     </main>
 
+    {% if icp_text %}
+    <footer class="site-footer">
+      <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">{{ icp_text }}</a>
+    </footer>
+    {% endif %}
+
     <script src="/assets/app.js?v=20260429"></script>
   </body>
 </html>

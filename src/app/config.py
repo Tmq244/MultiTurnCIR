@@ -18,6 +18,7 @@ class AppConfig:
     device: str
     gpu_id: int
     index_limit: int | None
+    icp_text: str | None
 
 
 def _parse_index_limit() -> int | None:
@@ -49,6 +50,19 @@ def _resolve_cache_dir(project_root: Path, index_limit: int | None) -> Path:
     return project_root / "cache" / f"cache_bench_{index_limit}"
 
 
+def _load_icp_text(project_root: Path) -> str | None:
+    raw = os.getenv("MFR_ICP_TEXT", "").strip()
+    if raw:
+        return raw
+
+    icp_file = project_root / ".icp_number"
+    if not icp_file.exists():
+        return None
+
+    text = icp_file.read_text(encoding="utf-8").strip()
+    return text or None
+
+
 def get_config() -> AppConfig:
     project_root = Path(__file__).resolve().parents[2]
     app_root = Path(__file__).resolve().parents[1]
@@ -75,4 +89,5 @@ def get_config() -> AppConfig:
         device=device,
         gpu_id=gpu_id,
         index_limit=index_limit,
+        icp_text=_load_icp_text(project_root),
     )
