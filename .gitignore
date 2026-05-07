@@ -2,3 +2,4 @@ images
 cache
 *.pyc
 *.pth
+*.zip
